@@ -54,6 +54,12 @@ clean_df = function(data, index) {
           janitor::remove_empty_columns %>%
           arrange_(index) %>%
           select_(.dots = c(index, noquote(order(names(.)))))
+    dups = data %>% 
+           janitor::get_dupes(noquote(index)) %>%
+           nrow
+    if(dups > 0){
+        warning(paste(dups, 'duplicate indices.'))
+    }
     return(out)
 }
 

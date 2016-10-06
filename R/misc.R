@@ -47,18 +47,22 @@ ClosestString = function(x, y, n=1){
 #' @export
 #' @examples
 #' sort_df(dat, c('iso3c_host', 'iso3c_home'))
-clean_df = function(data, index) {
+clean_df = function(data, index=NULL) {
     out = data %>%
           clean_names %>% # janitor
-          remove_empty_rows %>%  # janitor
-          remove_empty_cols %>% # janitor
-          arrange_(index) %>%
-          select_(.dots = c(index, noquote(order(names(.)))))
-    dups = data %>% 
-           get_dupes(noquote(index)) %>% # janitor
-           nrow
-    if(dups > 0){
-        warning(paste(dups, 'duplicate indices.'))
+          remove_empty_cols # janitor
+    if(!is.null(index)){
+        out = out %>%
+              arrange_(index) %>%
+              group_by_(index) %>%
+              remove_empty_rows %>% # janitor
+              data.frame %>% 
+              select_(.dots = c(index, noquote(order(names(.)))))
+        dups = apply(out[, index], 1, paste, collapse='')
+        dups = sum(duplicated(dups))
+        if(dups > 0){
+            warning(paste(dups, 'duplicate indices.'))
+        }
     }
     return(out)
 }

@@ -12,7 +12,8 @@ Imports:
     WDI,
     countrycode,
     ggplot2,
-    gridExtra
+    gridExtra,
+    janitor
 Suggests:
     testthat
 RoxygenNote: 5.0.1

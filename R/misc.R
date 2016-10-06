@@ -37,27 +37,27 @@ ClosestString = function(x, y, n=1){
     return(out)
 }
 
-#' Sorting a data.frame based on an index
+#' Clean a data.frame
 #'
-#' This function sorts the columns and rows of a data.frame using an index
+#' Sorts rows, cleans columnames, alphabetizes columns, remove empty rows and
+#' columns of a data frame
 #' @param data data.frame to sort
 #' @param index sorting columns (character vector)
 #' @keywords sort data frame
 #' @export
 #' @examples
 #' sort_df(dat, c('iso3c_host', 'iso3c_home'))
-sort_df = function(data, index=NULL) {
-    vars = colnames(data)
-    vars = vars[!vars %in% index]
-    vars = sort(vars)
-    index = index[!index %in% vars]
-    out = data[, c(index, vars)]
-    out = sort(out, by=index)
+clean_df = function(data, index) {
+    out = data %>%
+          janitor::clean_names %>%
+          janitor::remove_empty_rows %>% 
+          janitor::remove_empty_columns %>%
+          arrange_(index) %>%
+          select_(.dots = c(index, noquote(order(names(.)))))
     return(out)
 }
 
-
-#' Write to CSV file with automatic date
+#' Write data frame to CSV file with date stamp
 #'
 #' Writes to a CSV file with date automatically appended to file name
 #' @param data data.frame to write
@@ -65,8 +65,8 @@ sort_df = function(data, index=NULL) {
 #' @param include row.names (boolean)
 #' @export
 #' @examples
-#' write_csv(dat, file="data/dataset")
-write_csv = function(data, file, row.names=FALSE) {
+#' write_df(dat, file="data/dataset")
+write_df = function(data, file, row.names=FALSE) {
     today = gsub('-', '', Sys.Date())
     fn = paste(file, '_', today, '.csv', sep='')
     write.csv(data, file=fn, row.names=row.names)

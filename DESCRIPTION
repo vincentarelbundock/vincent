@@ -1,0 +1,18 @@
+Package: vincent
+Title: Personal functions
+Version: 0.1
+Authors@R: person("Vincent", "Arel-Bundock", email = "vincent.arel-bundock@umontreal.ca", role = c("aut", "cre"))
+Description: I don't recommend you use this package unless your name is Vincent (and perhaps not even then)
+Depends:
+    R (>= 3.2.0)
+License: GPLv3
+LazyData: true
+Imports:
+    dplyr,
+    WDI,
+    countrycode,
+    ggplot2,
+    gridExtra
+Suggests:
+    testthat
+RoxygenNote: 5.0.1

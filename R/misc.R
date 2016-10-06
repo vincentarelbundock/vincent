@@ -52,6 +52,9 @@ clean_df = function(data, index=NULL) {
           clean_names %>% # janitor
           remove_empty_cols # janitor
     if(!is.null(index)){
+        for(i in index){
+            out = out[!is.na(out[, i]),]
+        }
         out = out %>%
               arrange_(index) %>%
               group_by_(index) %>%

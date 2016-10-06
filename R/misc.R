@@ -51,7 +51,7 @@ clean_df = function(data, index) {
     out = data %>%
           clean_names %>% # janitor
           remove_empty_rows %>%  # janitor
-          remove_empty_columns %>% # janitor
+          remove_empty_cols %>% # janitor
           arrange_(index) %>%
           select_(.dots = c(index, noquote(order(names(.)))))
     dups = data %>% 

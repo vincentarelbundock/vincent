@@ -49,13 +49,13 @@ ClosestString = function(x, y, n=1){
 #' sort_df(dat, c('iso3c_host', 'iso3c_home'))
 clean_df = function(data, index) {
     out = data %>%
-          janitor::clean_names %>%
-          janitor::remove_empty_rows %>% 
-          janitor::remove_empty_columns %>%
+          clean_names %>% # janitor
+          remove_empty_rows %>%  # janitor
+          remove_empty_columns %>% # janitor
           arrange_(index) %>%
           select_(.dots = c(index, noquote(order(names(.)))))
     dups = data %>% 
-           janitor::get_dupes(noquote(index)) %>%
+           get_dupes(noquote(index)) %>% # janitor
            nrow
     if(dups > 0){
         warning(paste(dups, 'duplicate indices.'))

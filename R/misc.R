@@ -56,8 +56,8 @@ clean_df = function(data, index=NULL) {
             out = out[!is.na(out[, i]),]
         }
         out = out %>%
-              arrange_(index) %>%
-              group_by_(index) %>%
+              arrange_(.dots=index) %>%
+              group_by_(.dots=index) %>%
               remove_empty_rows %>% # janitor
               data.frame %>% 
               select_(.dots = c(index, noquote(order(names(.)))))

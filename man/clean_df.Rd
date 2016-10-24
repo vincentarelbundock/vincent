@@ -4,7 +4,7 @@
 \alias{clean_df}
 \title{Clean a data.frame}
 \usage{
-clean_df(data, index)
+clean_df(data, index = NULL)
 }
 \arguments{
 \item{data}{data.frame to sort}

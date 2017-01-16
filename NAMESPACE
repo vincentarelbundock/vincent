@@ -3,6 +3,8 @@
 export(ClosestString)
 export(GetWDI)
 export(NormalizeGrades)
+export(RobustVarCov)
+export(TeXTables)
 export(clean_df)
 export(confint_robust)
 export(get_dups)

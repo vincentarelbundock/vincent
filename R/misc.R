@@ -141,3 +141,92 @@ confint_robust <- function (object, parm, level = 0.95, ...)
     ci[] <- cf[parm] + ses %o% fac
     ci
 }
+
+#' Robust VarCov
+#'
+#' @param models a list of models
+#' @export
+RobustVarCov = function(models, fun=NULL){
+    bad = NULL
+    vcov = list()
+    if(is.null(fun)){
+        fun = sandwich::vcovHC
+    }
+    for(i in seq_along(models)){
+        tmp = try(fun(models[[i]]), silent=TRUE)
+        if(class(tmp) == 'try-error'){
+            tmp = vcov(models[[i]])
+            bad = c(bad, i)
+        }
+        vcov[[i]] = tmp
+    }
+    if(!is.null(bad)){
+        bad = paste(bad, collapse=', ')
+        msg = paste('Could not compute robust covariance matrix for model(s):', bad, '\n')
+        warning(msg)
+    }
+    return(vcov)
+}
+
+#' Saves (multiple) LaTeX tables to file
+#' 
+#' @param nmod maximum number of models (columns) per table
+#' @param varcov a list of variance covariance matrices of length length(models)
+#' @export
+TeXTables = function(models, file, label, caption,
+					 varcov=NULL, 
+                     dict=NULL, 
+					 nmod=6,  
+                     digits=3, 
+                     stars=NULL, 
+				     omit.coef='iso3|region|president|year',
+					 include.loglik=FALSE, 
+                     include.aic=FALSE, 
+                     include.bic=FALSE,
+					 include.deviance=FALSE, 
+                     use.packages=FALSE, 
+  					 ...){
+    GetP = function(i) lmtest::coeftest(models[[i]], vcov=varcov[[i]])[, 4]
+    GetSE = function(i) sqrt(diag(varcov[[i]]))
+    idx = split(seq_along(models), ceiling(seq_along(models) / nmod))
+    for(i in seq_along(idx)){
+        # Uncertainty
+        if(is.null(varcov)){
+            se = FALSE
+            pvalues = FALSE
+        }else{
+            se = lapply(idx[[i]], GetSE)
+            pvalues = lapply(idx[[i]], GetP)
+        }
+        # Labels and captions
+        if(length(idx) > 1){
+            caption_tmp = paste0(caption, ' (', i, ' of ', length(idx), ')')
+            label_tmp = paste0(label, i)
+            file_tmp = paste0(file, i, '.tex')
+        }else{
+            caption_tmp = caption
+            label_tmp = label
+            file_tmp = paste0(file, '.tex')
+        }
+        # LaTeX production
+        tab = texreg(models[idx[[i]]],
+                     label = label_tmp,
+                     caption = caption_tmp,
+                     override.se = se,
+                     override.pvalues = pvalues,
+                     digits = digits, 
+                     stars = stars, 
+                     include.loglik = include.loglik,
+                     include.aic = include.aic,
+                     include.bic = include.bic,
+                     omit.coef = omit.coef,
+                     caption.above=TRUE, 
+                     ...)
+        if(!is.null(dict)){
+            for(n in names(dict)){
+                tab = gsub(n, dict[n], tab, fixed=FALSE)
+            }
+        }
+        cat(tab, file=file_tmp)
+    }
+}

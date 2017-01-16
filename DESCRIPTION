@@ -13,6 +13,8 @@ Imports:
     countrycode,
     ggplot2,
     gridExtra,
+    sandwich,
+    texreg,
     janitor
 Suggests:
     testthat

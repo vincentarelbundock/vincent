@@ -219,6 +219,7 @@ TeXTables = function(models, file, label, caption,
                      include.loglik = include.loglik,
                      include.aic = include.aic,
                      include.bic = include.bic,
+                     include.deviance = include.deviance,
                      omit.coef = omit.coef,
                      caption.above=TRUE, 
                      ...)

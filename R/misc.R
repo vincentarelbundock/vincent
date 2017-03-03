@@ -179,7 +179,7 @@ TeXTables = function(models, file, label, caption,
 					 nmod=6,  
                      digits=3, 
                      stars=NULL, 
-				     omit.coef='iso3|region|president|year',
+                     custom.coef.map=NULL,
 					 include.loglik=FALSE, 
                      include.aic=FALSE, 
                      include.bic=FALSE,
@@ -212,6 +212,7 @@ TeXTables = function(models, file, label, caption,
         tab = texreg(models[idx[[i]]],
                      label = label_tmp,
                      caption = caption_tmp,
+                     custom.coef.map = custom.coef.map,
                      override.se = se,
                      override.pvalues = pvalues,
                      digits = digits, 
@@ -220,14 +221,8 @@ TeXTables = function(models, file, label, caption,
                      include.aic = include.aic,
                      include.bic = include.bic,
                      include.deviance = include.deviance,
-                     omit.coef = omit.coef,
                      caption.above=TRUE, 
+                     file = file_tmp,
                      ...)
-        if(!is.null(dict)){
-            for(n in names(dict)){
-                tab = gsub(n, dict[n], tab, fixed=FALSE)
-            }
-        }
-        cat(tab, file=file_tmp)
     }
 }

@@ -175,7 +175,6 @@ RobustVarCov = function(models, fun=NULL){
 #' @export
 TeXTables = function(models, file, label, caption,
 					 varcov=NULL, 
-                     dict=NULL, 
 					 nmod=6,  
                      digits=3, 
                      stars=NULL, 
@@ -185,6 +184,7 @@ TeXTables = function(models, file, label, caption,
                      include.bic=FALSE,
 					 include.deviance=FALSE, 
                      use.packages=FALSE, 
+                     warn=TRUE,
   					 ...){
     GetP = function(i) lmtest::coeftest(models[[i]], vcov=varcov[[i]])[, 4]
     GetSE = function(i) sqrt(diag(varcov[[i]]))
@@ -224,5 +224,13 @@ TeXTables = function(models, file, label, caption,
                      caption.above=TRUE, 
                      file = file_tmp,
                      ...)
+        # Warn if coefficients were omitted by custom.coef.map
+        if(!is.null(custom.coef.map) & warn){
+            variables = unique(unlist(sapply(models, function(k) labels(terms((formula(k)))))))
+            variables = variables[!variables %in% names(custom.coef.map)]
+            if(length(variables) > 0) {
+                warning('The following coefficients were omitted from the table: ', paste(variables, collapse=', ')) 
+            }
+        }
     }
 }

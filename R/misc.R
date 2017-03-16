@@ -1,4 +1,4 @@
-#' Download and clean WDI data
+#' Download and cean WDI data
 #'
 #' @param dictionary (named character vector)
 #' @export
@@ -226,10 +226,10 @@ TeXTables = function(models, file, label, caption,
                      ...)
         # Warn if coefficients were omitted by custom.coef.map
         if(!is.null(custom.coef.map) & warn){
-            variables = unique(unlist(sapply(models, function(k) labels(terms((formula(k)))))))
-            variables = variables[!variables %in% names(custom.coef.map)]
-            if(length(variables) > 0) {
-                warning('The following coefficients were omitted from the table: ', paste(variables, collapse=', ')) 
+            coefficients = unique(unlist(sapply(models, function(k) names(coef(k)))))
+            coefficients = coefficients[!coefficients %in% names(custom.coef.map)]
+            if(length(coefficients) > 0) {
+                warning('The following coefficients were omitted from the table: ', paste(coefficients, collapse=', ')) 
             }
         }
     }

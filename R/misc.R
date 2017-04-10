@@ -174,6 +174,7 @@ RobustVarCov = function(models, fun=NULL){
 #' @param varcov a list of variance covariance matrices of length length(models)
 #' @export
 TeXTables = function(models, file, label, caption,
+                     output = 'latex',
 					 varcov=NULL, 
 					 nmod=6,  
                      digits=3, 
@@ -209,7 +210,13 @@ TeXTables = function(models, file, label, caption,
             file_tmp = paste0(file, '.tex')
         }
         # LaTeX production
-        tab = texreg(models[idx[[i]]],
+        if (output == 'latex') {
+            f = texreg
+        } else if (output == 'html') {
+            file_tmp = gsub('tex$', 'html', file_tmp)
+            f = htmlreg
+        }
+        tab = f(models[idx[[i]]],
                      label = label_tmp,
                      caption = caption_tmp,
                      custom.coef.map = custom.coef.map,

@@ -14,4 +14,3 @@ get_dups(data, index)
 \description{
 Convert percentage to letter grade
 }
-

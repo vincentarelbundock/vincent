@@ -19,4 +19,3 @@ Writes to a CSV file with date automatically appended to file name
 \examples{
 write_df(dat, file="data/dataset")
 }
-

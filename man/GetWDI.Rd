@@ -2,7 +2,7 @@
 % Please edit documentation in R/misc.R
 \name{GetWDI}
 \alias{GetWDI}
-\title{Download and clean WDI data}
+\title{Download and cean WDI data}
 \usage{
 GetWDI(dictionary = c(NY.GDP.PCAP.KD = "gdppc"))
 }
@@ -10,9 +10,8 @@ GetWDI(dictionary = c(NY.GDP.PCAP.KD = "gdppc"))
 \item{dictionary}{(named character vector)}
 }
 \description{
-Download and clean WDI data
+Download and cean WDI data
 }
 \examples{
 GetWDI(dictionary=c("NY.GDP.MKTP.CD.XD"='deflator', "NY.GDP.PCAP.KD"='gdppc'))
 }
-

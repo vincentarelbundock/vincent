@@ -16,4 +16,3 @@ ClosestString(x, y, n = 1)
 \description{
 Find best fuzzy matches for each element of a vector with itself
 }
-

@@ -12,4 +12,3 @@ studentize(x)
 \description{
 Studentize a variable
 }
-

@@ -21,4 +21,3 @@ sort_df(dat, c('iso3c_host', 'iso3c_home'))
 \keyword{data}
 \keyword{frame}
 \keyword{sort}
-

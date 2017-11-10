@@ -14,4 +14,3 @@ NormalizeGrades(data, plot = FALSE)
 \description{
 Normalize grades by 2nd/3rd quartiles
 }
-

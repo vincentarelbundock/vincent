@@ -42,4 +42,3 @@ Copied from http://stackoverflow.com/questions/10984556
 x <- mclapply2(1:1000, function(i, y) Sys.sleep(0.01))
 x <- mclapply2(1:3, function(i, y) Sys.sleep(1), mc.cores=1)
 }
-

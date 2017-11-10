@@ -12,4 +12,3 @@ zero_one(x)
 \description{
 Recode a variable to 0-1 interval
 }
-

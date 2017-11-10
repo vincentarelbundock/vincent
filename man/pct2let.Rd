@@ -14,4 +14,3 @@ pct2let(grades, slack = 1.5)
 \description{
 Convert percentage to letter grade
 }
-

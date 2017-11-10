@@ -16,4 +16,3 @@ have dates appended to them.
 \examples{
 read_last_csv('dataset')
 }
-

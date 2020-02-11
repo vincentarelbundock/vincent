@@ -49,14 +49,14 @@ NormalizeGrades = function(data, plot=FALSE){
 #' @param index (character vector)
 #' @param slack (integer)
 #' @export
-pct2let = function(grades, slack=1.5){
+pct2let = function(grades, slack_fail = 2, slack_pass = 1){
     bareme = structure(list(lb = c(90, 85, 80, 77, 73, 70, 65, 60, 57, 54, 
     50, 35, 0.01, 0), ub = c(100, 89.99, 84.99, 79.99, 76.99, 72.99, 
     69.99, 64.99, 59.99, 56.99, 53.99, 49.99, 34.99, 0.01), let = c("A+", 
     "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "E", 
     "F", "F*")), .Names = c("lb", "ub", "let"), class = "data.frame", row.names = c(NA, 
     -14L))
-    bareme$lb = bareme$lb - slack
+    grades = ifelse(grades < 50, grades + slack_fail, grades + slack_pass)
     out = grades
     for(i in nrow(bareme):1){
         out[grades >= bareme$lb[i]] = bareme$let[i]

@@ -1,27 +1,8 @@
-#' Download and cean WDI data
-#'
-#' @param dictionary (named character vector)
-#' @export
-#' @examples
-#' GetWDI(dictionary=c("NY.GDP.MKTP.CD.XD"='deflator', "NY.GDP.PCAP.KD"='gdppc'))
-GetWDI = function(dictionary=c("NY.GDP.PCAP.KD"='gdppc')){
-    dat = WDI(indicator=names(dictionary), start=1960, end=2015, extra=TRUE)
-    dictionary = dictionary[names(dictionary) %in% colnames(dat)]
-    dat = dat[, c('iso3c', 'country', 'income', 'region', 'year', names(dictionary))]
-    colnames(dat) = c('iso3c', 'country', 'income', 'region', 'year', dictionary)
-    dat = dat[dat$region != 'Aggregates',]
-    dat$region = gsub(' \\(.*', '', dat$region)
-    dat$iso3n = countrycode(dat$iso3c, 'iso3c', 'iso3n')
-    dat = vincent::sort_df(dat, c('iso3c', 'iso3n', 'country', 'region', 'year', 'income'))
-    dat = dat[!is.na(dat$country),]
-    return(dat)
-}
-
 #' Find best fuzzy matches for each element of a vector with itself
 #'
 #' @param x strings to be matched (character)
 #' @param y strings to match to (character)
-#' @param matches how many strings to return? (integer)
+#' @param n how many strings to return? (integer)
 #' @export
 ClosestString = function(x, y, n=1){
     dist = adist(x, y)
@@ -37,53 +18,6 @@ ClosestString = function(x, y, n=1){
     return(out)
 }
 
-#' Clean a data.frame
-#'
-#' Sorts rows, cleans columnames, alphabetizes columns, remove empty rows and
-#' columns of a data frame
-#' @param data data.frame to sort
-#' @param index sorting columns (character vector)
-#' @keywords sort data frame
-#' @export
-#' @examples
-#' sort_df(dat, c('iso3c_host', 'iso3c_home'))
-clean_df = function(data, index=NULL) {
-    out = data %>%
-          clean_names %>% # janitor
-          remove_empty_cols # janitor
-    if(!is.null(index)){
-        for(i in index){
-            out = out[!is.na(out[, i]),]
-        }
-        out = out %>%
-              arrange_(.dots=index) %>%
-              group_by_(.dots=index) %>%
-              remove_empty_rows %>% # janitor
-              data.frame %>% 
-              select_(.dots = c(index, noquote(order(names(.)))))
-        dups = apply(out[, index], 1, paste, collapse='')
-        dups = sum(duplicated(dups))
-        if(dups > 0){
-            warning(paste(dups, 'duplicate indices.'))
-        }
-    }
-    return(out)
-}
-
-#' Write data frame to CSV file with date stamp
-#'
-#' Writes to a CSV file with date automatically appended to file name
-#' @param data data.frame to write
-#' @param file filename to write to
-#' @param include row.names (boolean)
-#' @export
-#' @examples
-#' write_df(dat, file="data/dataset")
-write_df = function(data, file, row.names=FALSE) {
-    today = gsub('-', '', Sys.Date())
-    fn = paste(file, '_', today, '.csv', sep='')
-    write.csv(data, file=fn, row.names=row.names)
-}
 
 #' Studentize a variable
 #' @param x numeric vector to studentize
@@ -102,18 +36,29 @@ zero_one = function(x) {
     return(out)
 }
 
+#' Write data frame to TSV file with date stamp
+#'
+#' Writes to a TSV file with date automatically appended to file name
+#' @param data data.frame to write
+#' @param path stem to write to (without date or .tsv extension)
+#' @export
+write_tsv = function(data, path) {
+    today = gsub('-', '', Sys.Date())
+    fn = paste(path, '_', today, '.tsv', sep='')
+    vroom::vroom_write(data, path = fn)
+}
+
 #' Read last CSV
 #'
 #' Globs file names, sorts and reads the last file. Useful when CSV file names
 #' have dates appended to them.
-#' @param file beginning of file name -- no extension (character)
+#' @param path stem to read from (without date or .tsv extension)
 #' @export
 #' @examples
-#' read_last_csv('dataset')
-read_last_csv = function(file, ...) {
-    fn = Sys.glob(paste(file, '*.csv', sep=''))
+#' read_last_tsv('dataset')
+read_last_tsv = function(path) {
+    fn = Sys.glob(paste(path, '*.tsv', sep=''))
     fn = fn[length(fn)]
-    cat('\nLoading file: ', fn, '\n')
-    out = read.csv(fn, stringsAsFactors=FALSE, ...)
+    out = vroom::vroom(fn)
     return(out)
 }

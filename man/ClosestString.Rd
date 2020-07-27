@@ -11,7 +11,7 @@ ClosestString(x, y, n = 1)
 
 \item{y}{strings to match to (character)}
 
-\item{matches}{how many strings to return? (integer)}
+\item{n}{how many strings to return? (integer)}
 }
 \description{
 Find best fuzzy matches for each element of a vector with itself

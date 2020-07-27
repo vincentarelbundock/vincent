@@ -40,14 +40,15 @@ NormalizeGrades = function(data, plot=FALSE){
             geom_density() + theme_minimal()
         z = ggplot(out, aes(note, note_norm, color=correcteur, linetype=correcteur)) + 
             geom_point() + theme_minimal()
-        grid.arrange(x, y, z)
+        x + y + z
     }
 }
 
 #' Convert percentage to letter grade
 #'
-#' @param index (character vector)
-#' @param slack (integer)
+#' @param grades (numeric)
+#' @param slack_fail (integer)
+#' @param slack_pass (integer)
 #' @export
 pct2let = function(grades, slack_fail = 2, slack_pass = 1){
     bareme = structure(list(lb = c(90, 85, 80, 77, 73, 70, 65, 60, 57, 54, 
@@ -61,19 +62,5 @@ pct2let = function(grades, slack_fail = 2, slack_pass = 1){
     for(i in nrow(bareme):1){
         out[grades >= bareme$lb[i]] = bareme$let[i]
     }
-    return(out)
-}
-
-#' Convert percentage to letter grade
-#'
-#' @param data (data.frame)
-#' @param index (vector of columns names)
-#' @export
-get_dups = function(data, index){
-    idx = data[, index]
-    idx = apply(idx, 1, paste, collapse='-')
-    idx = idx %in% idx[duplicated(idx)]
-    out = data[idx,]
-    out = vincent::sort_df(out, index)
     return(out)
 }

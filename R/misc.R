@@ -36,18 +36,6 @@ zero_one = function(x) {
     return(out)
 }
 
-#' Write data frame to TSV file with date stamp
-#'
-#' Writes to a TSV file with date automatically appended to file name
-#' @param data data.frame to write
-#' @param path stem to write to (without date or .tsv extension)
-#' @export
-write_tsv = function(data, path) {
-    today = gsub('-', '', Sys.Date())
-    fn = paste(path, '_', today, '.tsv', sep='')
-    vroom::vroom_write(data, path = fn)
-}
-
 #' Read last CSV
 #'
 #' Globs file names, sorts and reads the last file. Useful when CSV file names

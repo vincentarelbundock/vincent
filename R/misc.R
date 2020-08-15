@@ -35,18 +35,3 @@ zero_one = function(x) {
     out = out / max(out, na.rm=TRUE)
     return(out)
 }
-
-#' Read last CSV
-#'
-#' Globs file names, sorts and reads the last file. Useful when CSV file names
-#' have dates appended to them.
-#' @param path stem to read from (without date or .tsv extension)
-#' @export
-#' @examples
-#' read_last_tsv('dataset')
-read_last_tsv = function(path) {
-    fn = Sys.glob(paste(path, '*.tsv', sep=''))
-    fn = fn[length(fn)]
-    out = vroom::vroom(fn)
-    return(out)
-}

@@ -11,8 +11,7 @@ Imports:
     dplyr,
     ggplot2,
     patchwork,
-    scico,
-    vroom
+    scico
 Suggests:
     testthat
 RoxygenNote: 7.1.1

@@ -3,6 +3,7 @@
 S3method(ggplot_add,conditional_theme_vab)
 export(ClosestString)
 export(NormalizeGrades)
+export(get_os)
 export(pct2let)
 export(set_base_theme)
 export(studentize)
